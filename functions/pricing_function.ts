@@ -47,6 +47,12 @@ export const PricingFunction = DefineFunction({
         type: Schema.types.number,
         description: "Weekend Night Price",
       },
+      channelId: {
+        type: Schema.types.string,
+      },
+      messageTs: {
+        type: Schema.types.string,
+      },
     },
     required: [
       "userId",
@@ -57,6 +63,8 @@ export const PricingFunction = DefineFunction({
       "weekDayNight",
       "weekEndDay",
       "weekEndNight",
+      "channelId",
+      "messageTs",
     ],
   },
   output_parameters: {
@@ -88,7 +96,7 @@ export default SlackFunction(
       "x-api-key": env.MAGE_API_KEY,
       Cookie: `oauth_token=${env.MAGE_OAUTH_TOKEN}`,
     };
-    const { userId, facilityId, licenseType, marginPercentage, weekDayDay, weekDayNight, weekEndDay, weekEndNight } = inputs;
+    const { userId, facilityId, licenseType, marginPercentage, weekDayDay, weekDayNight, weekEndDay, weekEndNight, channelId, messageTs } = inputs;
 
     //pull email from userID
     const userInfo = await client.users.info({ user: userId });
@@ -120,7 +128,9 @@ export default SlackFunction(
                 "weekday_day_rate": weekDayDay,
                 "weekday_night_rate": weekDayNight,
                 "weekend_day_rate": weekEndDay,
-                "weekend_night_rate": weekEndNight
+                "weekend_night_rate": weekEndNight,
+                "message_ts": messageTs,
+                "channel_id": channelId
               },
               "error_on_failure": true
             }

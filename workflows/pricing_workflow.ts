@@ -1,4 +1,5 @@
 import { DefineWorkflow, Schema } from "deno-slack-sdk/mod.ts";
+import { CreateMessage } from "../functions/create_message.ts";
 import { PricingFunction } from "../functions/pricing_function.ts";
 import { PollPipelineStatus } from "../functions/poll_pipeline_status.ts";
 
@@ -66,10 +67,15 @@ const pricing = PricingWorkflow.addStep(
   },
 );
 
+const createMessageStep = PricingWorkflow.addStep(CreateMessage, {
+  userId: PricingWorkflow.inputs.user,
+  facilityId: pricing.outputs.fields.facility_id,
+  licenseType: pricing.outputs.fields.license_type,
+});
+
 const messageStep = PricingWorkflow.addStep(Schema.slack.functions.SendMessage, {
-  channel_id: 'C06AGTL8EVC',
-  message:
-    `Pricing adjustments for ${pricing.outputs.fields.facility_id}: ${pricing.outputs.fields.license_type} submitted by <@${PricingWorkflow.inputs.user}> are being submitted.`,
+  channel_id: 'C071W2PH09W',
+  message: createMessageStep.outputs.messageText,
 });
 
 const pricingChange = PricingWorkflow.addStep(PricingFunction, {
@@ -81,6 +87,8 @@ const pricingChange = PricingWorkflow.addStep(PricingFunction, {
   weekDayNight: pricing.outputs.fields.weekday_night,
   weekEndDay: pricing.outputs.fields.weekend_day,
   weekEndNight: pricing.outputs.fields.weekend_night,
+  channelId: messageStep.outputs.message_context.channel_id,
+  messageTs: messageStep.outputs.message_context.message_ts,
 });
 
 const delayStep = PricingWorkflow.addStep(

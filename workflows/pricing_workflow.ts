@@ -1,7 +1,7 @@
 import { DefineWorkflow, Schema } from "deno-slack-sdk/mod.ts";
 import { CreateMessage } from "../functions/create_message.ts";
 import { PricingFunction } from "../functions/pricing_function.ts";
-import { PollPipelineStatus } from "../functions/poll_pipeline_status.ts";
+//import { PollPipelineStatus } from "../functions/poll_pipeline_status.ts";
 
 const PricingWorkflow = DefineWorkflow({
   callback_id: "pricing_workflow",
@@ -91,18 +91,18 @@ const pricingChange = PricingWorkflow.addStep(PricingFunction, {
   messageTs: messageStep.outputs.message_context.message_ts,
 });
 
-const delayStep = PricingWorkflow.addStep(
-  Schema.slack.functions.Delay,
-  {
-    minutes_to_delay: 2,
-  },
-);
+// const delayStep = PricingWorkflow.addStep(
+//   Schema.slack.functions.Delay,
+//   {
+//     minutes_to_delay: 2,
+//   },
+// );
 
-const pricingChangeStatus = PricingWorkflow.addStep(PollPipelineStatus, {
-  user: PricingWorkflow.inputs.user,
-  runDict: pricingChange.outputs.runDict,
-  channelId: messageStep.outputs.message_context.channel_id,
-  messageTs: messageStep.outputs.message_context.message_ts,
-});
+// const pricingChangeStatus = PricingWorkflow.addStep(PollPipelineStatus, {
+//   user: PricingWorkflow.inputs.user,
+//   runDict: pricingChange.outputs.runDict,
+//   channelId: messageStep.outputs.message_context.channel_id,
+//   messageTs: messageStep.outputs.message_context.message_ts,
+// });
 
 export { PricingWorkflow };

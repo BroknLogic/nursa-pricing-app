@@ -12,5 +12,5 @@ export default Manifest({
   icon: "assets/pricing_app.png",
   workflows: [PricingWorkflow],
   outgoingDomains: ["cluster.mage.ai"],
-  botScopes: ["commands", "chat:write", "chat:write.public", "users:read", "users:read.email",],
+  botScopes: ["commands", "chat:write", "chat:write.public", "channels:read", "channels:history", "users:read", "users:read.email",],
 });

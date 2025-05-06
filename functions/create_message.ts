@@ -59,23 +59,17 @@ export default SlackFunction(
      */
 
     const { userId, facilityId, licenseType } = inputs;
-    console.log('start');
+
     //Splits arrays 
     const facilityIds = facilityId.split(',');
-
-    console.log(facilityIds);
-    console.log(licenseType);
 
     // Build every combination of facility_id and license_type
     const lines = facilityIds.flatMap(facilityId => 
       licenseType.map(licenseType => `${facilityId}: ${licenseType} is pending`)
     );
-    console.log(lines);
 
     // Final message
     const messageText = `Pricing adjustments for submitted by <@${userId}>:\n` + lines.join('\n')
-
-    console.log(messageText);
 
     return {
       completed: true,

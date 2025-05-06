@@ -120,7 +120,7 @@ export default SlackFunction(
           const body = JSON.stringify({
             "pipeline_run": {
               "variables" : {
-                "email": "kevin.enrile@nursa.com",//TODO: Change back
+                "email": email,
                 "facility_id": facility, 
                 "license": license,
                 "margin_percentage": marginPercentage,

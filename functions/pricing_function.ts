@@ -117,6 +117,7 @@ export default SlackFunction(
       facility = facility.padStart(6, "0");
       for (let license of licenseType) {
         try {
+          console.log(`Message ts: ${messageTs} and Channel Id: ${channelId}`);
           const body = JSON.stringify({
             "pipeline_run": {
               "variables" : {

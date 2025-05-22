@@ -126,7 +126,8 @@ export default SlackFunction(
                 "weekend_day_rate": weekEndDay,
                 "weekend_night_rate": weekEndNight,
                 "slack_channel_id": channelId,
-                "slack_user_id": userId
+                "slack_user_id": userId,
+                "slack_token":'SLACK_PRICING_TOKEN'
               },
               "error_on_failure": true
             }

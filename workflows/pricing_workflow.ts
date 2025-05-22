@@ -67,16 +67,16 @@ const pricing = PricingWorkflow.addStep(
   },
 );
 
-const createMessageStep = PricingWorkflow.addStep(CreateMessage, {
-  userId: PricingWorkflow.inputs.user,
-  facilityId: pricing.outputs.fields.facility_id,
-  licenseType: pricing.outputs.fields.license_type,
-});
+// const createMessageStep = PricingWorkflow.addStep(CreateMessage, {
+//   userId: PricingWorkflow.inputs.user,
+//   facilityId: pricing.outputs.fields.facility_id,
+//   licenseType: pricing.outputs.fields.license_type,
+// });
 
-const messageStep = PricingWorkflow.addStep(Schema.slack.functions.SendMessage, {
-  channel_id: 'C06AGTL8EVC',
-  message: createMessageStep.outputs.messageText,
-});
+// const messageStep = PricingWorkflow.addStep(Schema.slack.functions.SendMessage, {
+//   channel_id: 'C06AGTL8EVC',
+//   message: createMessageStep.outputs.messageText,
+// });
 
 const pricingChange = PricingWorkflow.addStep(PricingFunction, {
   userId: PricingWorkflow.inputs.user, 
@@ -87,22 +87,22 @@ const pricingChange = PricingWorkflow.addStep(PricingFunction, {
   weekDayNight: pricing.outputs.fields.weekday_night,
   weekEndDay: pricing.outputs.fields.weekend_day,
   weekEndNight: pricing.outputs.fields.weekend_night,
-  channelId: messageStep.outputs.message_context.channel_id,
-  messageTs: messageStep.outputs.message_context.message_ts,
+  //channelId: 'C071W2PH09W' //this-is-not-a-test
+  channelId: 'C06AGTL8EVC' //fixed-rates-requests
 });
 
-const delayStep = PricingWorkflow.addStep(
-  Schema.slack.functions.Delay,
-  {
-    minutes_to_delay: 2,
-  },
-);
+// const delayStep = PricingWorkflow.addStep(
+//   Schema.slack.functions.Delay,
+//   {
+//     minutes_to_delay: 2,
+//   },
+// );
 
-const pricingChangeStatus = PricingWorkflow.addStep(PollPipelineStatus, {
-  user: PricingWorkflow.inputs.user,
-  runDict: pricingChange.outputs.runDict,
-  channelId: messageStep.outputs.message_context.channel_id,
-  messageTs: messageStep.outputs.message_context.message_ts,
-});
+// const pricingChangeStatus = PricingWorkflow.addStep(PollPipelineStatus, {
+//   user: PricingWorkflow.inputs.user,
+//   runDict: pricingChange.outputs.runDict,
+//   channelId: messageStep.outputs.message_context.channel_id,
+//   messageTs: messageStep.outputs.message_context.message_ts,
+// });
 
 export { PricingWorkflow };

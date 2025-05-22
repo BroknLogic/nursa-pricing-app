@@ -50,9 +50,6 @@ export const PricingFunction = DefineFunction({
       channelId: {
         type: Schema.types.string,
       },
-      messageTs: {
-        type: Schema.types.string,
-      },
     },
     required: [
       "userId",
@@ -64,7 +61,6 @@ export const PricingFunction = DefineFunction({
       "weekEndDay",
       "weekEndNight",
       "channelId",
-      "messageTs",
     ],
   },
   output_parameters: {
@@ -96,7 +92,7 @@ export default SlackFunction(
       "x-api-key": env.MAGE_API_KEY,
       Cookie: `oauth_token=${env.MAGE_OAUTH_TOKEN}`,
     };
-    const { userId, facilityId, licenseType, marginPercentage, weekDayDay, weekDayNight, weekEndDay, weekEndNight, channelId, messageTs } = inputs;
+    const { userId, facilityId, licenseType, marginPercentage, weekDayDay, weekDayNight, weekEndDay, weekEndNight, channelId } = inputs;
 
     //pull email from userID
     const userInfo = await client.users.info({ user: userId });
@@ -117,7 +113,6 @@ export default SlackFunction(
       facility = facility.padStart(6, "0");
       for (let license of licenseType) {
         try {
-          console.log(`Message ts: ${messageTs} and Channel Id: ${channelId}`);
           const body = JSON.stringify({
             "pipeline_run": {
               "variables" : {
@@ -130,8 +125,8 @@ export default SlackFunction(
                 "weekday_night_rate": weekDayNight,
                 "weekend_day_rate": weekEndDay,
                 "weekend_night_rate": weekEndNight,
-                "message_ts": messageTs,
-                "channel_id": channelId
+                "slack_channel_id": channelId,
+                "slack_user_id": userId
               },
               "error_on_failure": true
             }
